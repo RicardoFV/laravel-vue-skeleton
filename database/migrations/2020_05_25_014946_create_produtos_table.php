@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateProdutosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,17 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('produtos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            // esse campo sera usado para definir que tipo de usuario esta logado
-            // ex (superAdm, adm, vendedor)
-            $table->string('tipo_usuario');
+            $table->string('nome');
+            $table->string('descricao');
+            $table->integer('quantidade');
+            $table->decimal('preco', 10, 2)->default(0);
             // campo responsavel por definir se o usuario esta ativo ou não (1: ativo , 0: inativo)
             $table->integer('ativo');
-            $table->string('password');
-            $table->rememberToken();
+            // vinculo de usuario ao produtos
+            $table->integer('usuario_id')->unsigned();
+            $table->foreign('usuario_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -36,6 +35,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('produtos');
     }
 }
